@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'application'
+}
+
+group = 'io.github.underscore11code'
+version = '0.1.0-SNAPSHOT'
+mainClassName =  'io.github.underscore11code.utilbot.Bootstrap'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    implementation('net.dv8tion:JDA:4.2.0_209') {
+        exclude module: 'opus-java'
+    }
+    implementation('cloud.commandframework:cloud-jda:1.1.0')
+    implementation('org.spongepowered:configurate-hocon:4.0.0-SNAPSHOT')
+    implementation('com.google.inject:guice:4.2.3')
+    implementation('org.reflections:reflections:0.9.12')
+    implementation('ch.qos.logback:logback-classic:1.2.3')
+
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+}
+
+shadowJar{
+    archiveFileName = 'UtilBot.jar'
+}
