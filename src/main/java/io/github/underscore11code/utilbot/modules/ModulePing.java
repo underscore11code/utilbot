@@ -5,6 +5,7 @@ import cloud.commandframework.jda.JDA4CommandManager;
 import io.github.underscore11code.utilbot.module.ICommandModule;
 import io.github.underscore11code.utilbot.sender.IBotSender;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -16,21 +17,14 @@ public class ModulePing implements ICommandModule {
                 .commandBuilder("ping", Description.of("Checks the bot's connection speed to Discord"))
                 .handler(commandContext -> {
                     IBotSender sender = commandContext.getSender();
-                    sender.getChannel().sendMessage(getEmbed(sender.getEvent().getMessage()))
-                            .queue(message -> {
-                                message.editMessage(getEmbed(sender.getEvent().getMessage(), message)).queue();
-                            });
+                    sender.getChannel().sendMessage(getEmbed(commandContext.get("jda")))
+                            .reference(commandContext.getSender().getEvent().getMessage())
+                            .queue();
                 })
         );
     }
 
-    private MessageEmbed getEmbed(Message originalMessage) {
+    private MessageEmbed getEmbed(JDA jda) {
         return new EmbedBuilder().setTitle("Pong!").build();
-    }
-
-    private MessageEmbed getEmbed(Message originalMessage, Message sentMessage) {
-        return new EmbedBuilder(getEmbed(originalMessage)).setDescription("Latency: " +
-                (sentMessage.getTimeCreated().toInstant().toEpochMilli() -
-                        originalMessage.getTimeCreated().toInstant().toEpochMilli()) + "ms").build();
     }
 }

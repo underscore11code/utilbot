@@ -31,7 +31,9 @@ public class ModuleAbout implements ICommandModule {
                         embed = helpVerbose((CommandHelpHandler.VerboseHelpTopic<IBotSender>) topic);
                     else if (topic instanceof CommandHelpHandler.MultiHelpTopic)
                         embed = helpMulti((CommandHelpHandler.MultiHelpTopic<IBotSender>) topic);
-                    commandContext.getSender().getChannel().sendMessage(embed.setTitle("Help: " + search).build()).queue();
+                    commandContext.getSender().getChannel().sendMessage(embed.setTitle("Help: " + search).build())
+                            .reference(commandContext.getSender().getEvent().getMessage())
+                            .queue();
                 }));
 
         manager.command(manager.commandBuilder("help", Description.of("TEST"))
@@ -40,7 +42,9 @@ public class ModuleAbout implements ICommandModule {
                             .setTitle("Help")
                             .setDescription(getIndexDescription(manager.getCommandHelpHandler().getAllCommands()))
                             .setColor(Color.RED)
-                            .build()).queue();
+                            .build())
+                            .reference(commandContext.getSender().getEvent().getMessage())
+                            .queue();
                 }));
     }
 

@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation('net.dv8tion:JDA:4.2.0_209') {
+    implementation('net.dv8tion:JDA:4.2.0_219') {
         exclude module: 'opus-java'
     }
     implementation('cloud.commandframework:cloud-jda:1.1.0')

@@ -24,7 +24,9 @@ public class ModuleList implements ICommandModule {
                     sender.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Guild Roles")
                         .setDescription(getRoles(sender.getGuild()))
-                        .build()).queue();
+                        .build())
+                            .reference(commandContext.getSender().getEvent().getMessage())
+                            .queue();
                 })
         );
 
@@ -38,7 +40,9 @@ public class ModuleList implements ICommandModule {
                     sender.getChannel().sendMessage(new EmbedBuilder()
                             .setTitle("Guilds")
                             .setDescription(getGuilds(jda))
-                            .build()).queue();
+                            .build())
+                            .reference(commandContext.getSender().getEvent().getMessage())
+                            .queue();
                 }));
     }
 
