@@ -1,21 +1,29 @@
 package io.github.underscore11code.utilbot;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import io.github.underscore11code.utilbot.guice.MainModule;
+import io.github.underscore11code.utilbot.guice.CloudGuiceModule;
+import io.github.underscore11code.utilbot.guice.JdaGuiceModule;
 import lombok.Getter;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Bootstrap {
     private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
     @Getter private static Injector injector;
     public static void main(String[] args) {
-        logger.info("Initializing Main Module");
-        MainModule mainModule = new MainModule();
-        logger.info("Creating Injector. This causes a illegal reflective access error. " +
-                "It has been fixed in Guice dev builds, awaiting an official release. It can be ignored.");
-        injector = Guice.createInjector(mainModule);
+        injector = Guice.createInjector(new JdaGuiceModule(), new CloudGuiceModule(), new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Reflections.class).toInstance(new Reflections("io.github.underscore11code.utilbot"));
+            }
+        });
         logger.info("Starting UtilBot");
         UtilBot bot = injector.getInstance(UtilBot.class);
         Runtime.getRuntime().addShutdownHook(new Thread(bot::stop, "Shutdown"));
